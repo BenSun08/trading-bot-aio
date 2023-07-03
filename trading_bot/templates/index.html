@@ -1,0 +1,12 @@
+<!--aiohttpdemo_polls/templates/index.html-->
+{% set title = "Main" %}
+
+{% if questions %}
+    <ul>
+    {% for question in questions %}
+        <li>{{ question.question_text }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No questions are available.</p>
+{% endif %}
