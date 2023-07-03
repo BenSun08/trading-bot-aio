@@ -8,7 +8,7 @@ from alpaca.data.requests import StockLatestQuoteRequest, CryptoLatestQuoteReque
 from alpaca.data.live import StockDataStream, CryptoDataStream
 from alpaca.data.timeframe import TimeFrame
 from datetime import datetime
-from ..settings import config
+from settings import config
 import json
 import time
 import asyncio

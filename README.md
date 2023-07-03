@@ -3,6 +3,10 @@ Activate the virtual environment.
 ```sh
 source env/bin/activate
 ```
+Install the dependencies.
+```sh
+pip install -r requirements.txt
+```
 
 Run local server in development mode
 ```sh
