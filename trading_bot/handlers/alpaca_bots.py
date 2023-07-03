@@ -8,13 +8,12 @@ from alpaca.data.requests import StockLatestQuoteRequest, CryptoLatestQuoteReque
 from alpaca.data.live import StockDataStream, CryptoDataStream
 from alpaca.data.timeframe import TimeFrame
 from datetime import datetime
-from settings import config
+from ..settings import config
 import json
-import time
-import asyncio
 
 API_KEY = config['alpaca']['API_KEY']
 SECRET_KEY = config['alpaca']['SECRET_KEY']
+DATE_FORMAT = "%Y-%m-%d"
 
 class AlpacaTradeBot:
     def __init__(self):
@@ -61,11 +60,10 @@ class AlpacaTradeBot:
         print(market_order)
         return market_order
         
-    def get_orders(self, **kwargs):
+    def get_orders(self, status, side):
         # params to filter orders by
-        request_params = GetOrdersRequest(**kwargs)
+        request_params = GetOrdersRequest(status=status, side=side)
         orders = self.trading_client.get_orders(filter=request_params)
-        print(orders)
         return orders
     
     def cancel_all_orders(self):
@@ -91,17 +89,15 @@ class AlpacaDataBot:
         else:
             request_params = StockLatestQuoteRequest(symbol_or_symbols=symbol_or_symbols)
             latest_quote = self.client.get_stock_latest_quote(request_params)
-        print(latest_quote)
-        # return latest_quote
-        return json.dumps(latest_quote, default=str)
+        return latest_quote
     
     def get_history(self, symbol_or_symbols, start, end):
         if self.type == "crypto":
             request_params = CryptoBarsRequest(
                             symbol_or_symbols=symbol_or_symbols,
                             timeframe=TimeFrame.Day,
-                            start=datetime(start),
-                            end=datetime(end)
+                            start=datetime.strptime(start, DATE_FORMAT),
+                            end=datetime.strptime(end, DATE_FORMAT)
                         )
             bars = self.client.get_crypto_bars(request_params)
             # convert to dataframe
@@ -110,12 +106,13 @@ class AlpacaDataBot:
             request_params = StockBarsRequest(
                             symbol_or_symbols=symbol_or_symbols,
                             timeframe=TimeFrame.Day,
-                            start=datetime(start),
-                            end=datetime(end)
+                            start=datetime.strptime(start, DATE_FORMAT),
+                            end=datetime.strptime(end, DATE_FORMAT)
                         )
             bars = self.client.get_stock_bars(request_params)
             # convert to dataframe
             bars.df
+        return bars
 
 #paper trading:  wss://paper-api.alpaca.markets/stream 
 #live trading:   wss://api.alpaca.markets/stream
@@ -130,17 +127,17 @@ class AlpacaRealTimeBot:
     def subscribe(self, symbols, ws):
         async def quote_handler(data):
             rsp = data.json()
-            print(rsp)
+            # print(rsp)
             await ws.send_json(rsp)
 
         async def trade_handler(data):
             rsp = data.json()
-            print(rsp)
+            # print(rsp)
             await ws.send_json(rsp)
         
         async def updated_bar_handler(data):
             rsp = data.json()
-            print(rsp)
+            # print(rsp)
             await ws.send_json(rsp)
 
         self.data_stream.subscribe_quotes(quote_handler, *symbols)
@@ -158,10 +155,14 @@ class AlpacaRealTimeBot:
 
     
     def unsubscribe(self, symbols):
+        # self.data_stream._unsubscribe()
         self.data_stream.unsubscribe_quotes(*symbols)
         self.data_stream.unsubscribe_trades(*symbols)
         self.data_stream.unsubscribe_updated_bars(*symbols)
+        self.data_stream.stop()
 
+
+    def stop(self):
         self.data_stream.stop()
 
 

@@ -1,3 +1,4 @@
 aiohttp
 alpaca-py
 nest_asyncio
+aiohttp_jinja2
