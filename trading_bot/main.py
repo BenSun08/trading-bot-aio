@@ -1,3 +1,4 @@
+import argparse
 from aiohttp import web
 # import aiohttp_jinja2
 # import jinja2
@@ -16,6 +17,9 @@ setup_routes(app)
 app.add_subapp('/alpaca', alpacaApp)
 # setup_middlewares(app)
 # app.cleanup_ctx.append(pg_context)
+parser = argparse.ArgumentParser(description='Trading Bot')
+parser.add_argument('--port', type=int, default=8080, help='port to listen on')
 
 if __name__ == '__main__':
-    web.run_app(app, host='0.0.0.0', port=8080)
+    args = parser.parse_args()
+    web.run_app(app, port=args.port)

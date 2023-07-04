@@ -75,3 +75,13 @@ supervisorctl status # check the status of processes
 supervisorctl stop all[/app_name]
 
 ```
+### Nginx
+```sh
+nginx -s quit
+nginx -s stop
+nginx -s reload
+```
+#### Configuration
+```sh
+vim /etc/nginx/nginx.conf
+```
