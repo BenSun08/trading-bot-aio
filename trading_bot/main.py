@@ -19,7 +19,8 @@ app.add_subapp('/alpaca', alpacaApp)
 # app.cleanup_ctx.append(pg_context)
 parser = argparse.ArgumentParser(description='Trading Bot')
 parser.add_argument('--port', type=int, default=8080, help='port to listen on')
+parser.add_argument('--path')
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    web.run_app(app, port=args.port)
+    web.run_app(app, port=args.port, path=args.path)

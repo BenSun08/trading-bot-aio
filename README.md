@@ -80,6 +80,9 @@ supervisorctl stop all[/app_name]
 nginx -s quit
 nginx -s stop
 nginx -s reload
+
+ps -ax | grep nginx
+sudo pkill -f nginx
 ```
 #### Configuration
 ```sh
