@@ -88,3 +88,35 @@ sudo pkill -f nginx
 ```sh
 vim /etc/nginx/nginx.conf
 ```
+### Tmux
+
+new session
+```sh
+tmux new -s [session-name]
+```
+
+detach (*ctrl+b d*)
+```sh
+tmux detach
+```
+check all sessions
+```sh
+tmux ls
+```
+reconnect to the session
+```sh
+tmux attach -t [session-name]
+```
+kill session
+```sh
+tmux kill -t [session-name]
+```
+switch session
+```sh
+tmux switch -t [session-name]
+```
+rename session
+```sh
+tmux rename-session - t [new-name]
+```
+

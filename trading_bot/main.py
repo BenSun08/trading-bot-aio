@@ -1,3 +1,4 @@
+# import asyncio
 import argparse
 from aiohttp import web
 # import aiohttp_jinja2
@@ -9,6 +10,7 @@ from .handlers.alpaca import alpacaApp
 # from .middlewares import setup_middlewares
 # from db import pg_context
 
+# loop = asyncio.get_event_loop()
 app = web.Application()
 app['config'] = config
 # aiohttp_jinja2.setup(app, 

@@ -90,8 +90,8 @@ async def websocket_handler(request):
 
     try:
         async for msg in ws:
+            print(msg)
             if msg.type == aiohttp.WSMsgType.TEXT:
-                print(msg.data)
                 if msg.data == 'close':
                     for key in conns:
                         conns[key].stop()
@@ -106,7 +106,8 @@ async def websocket_handler(request):
 
                         if type == 'us_equity' or type == 'crypto':
                             liveBot = AlpacaRealTimeBot(type)
-                            liveBot.subscribe(symbols, ws)
+                            await liveBot.subscribe(symbols, ws)
+                            global count
                             count += 1
                             conns[str(count)] = liveBot
                         else:
@@ -115,6 +116,7 @@ async def websocket_handler(request):
                             return
                     elif action == "unsubscribe":
                         print("Unsubscribing", conns)
+                        symbols = data['symbols']
                         for key in conns:
                             print(key)
                             conns[key].unsubscribe(symbols)

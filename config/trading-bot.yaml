@@ -7,5 +7,5 @@ postgres:
   minsize: 1
   maxsze: 5
 alpaca:
-  API_KEY: PKEXG1SB9ZYHPV0B87U9
-  SECRET_KEY: iapgCvvRjKdoAVMVQa78hZ2KmgkxTxyIQtK8UepL
+  API_KEY: PKEF16J78LKHVQWP0QA6
+  SECRET_KEY: 63DHzORWI8kt7Fv6QyNErypuN1ilFe8667ogRmKh

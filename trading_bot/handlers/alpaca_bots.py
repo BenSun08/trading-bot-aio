@@ -124,7 +124,7 @@ class AlpacaRealTimeBot:
 
         self.type = type 
 
-    def subscribe(self, symbols, ws):
+    async def subscribe(self, symbols, ws):
         async def quote_handler(data):
             rsp = data.json()
             # print(rsp)
@@ -140,8 +140,8 @@ class AlpacaRealTimeBot:
             # print(rsp)
             await ws.send_json(rsp)
 
-        self.data_stream.subscribe_quotes(quote_handler, *symbols)
-        self.data_stream.subscribe_trades(trade_handler, *symbols)
+        # self.data_stream.subscribe_quotes(quote_handler, *symbols)
+        # self.data_stream.subscribe_trades(trade_handler, *symbols)
         self.data_stream.subscribe_updated_bars(updated_bar_handler, *symbols)
         
         try:
@@ -155,6 +155,7 @@ class AlpacaRealTimeBot:
 
     
     def unsubscribe(self, symbols):
+        print("unsubscribing...")
         # self.data_stream._unsubscribe()
         self.data_stream.unsubscribe_quotes(*symbols)
         self.data_stream.unsubscribe_trades(*symbols)
