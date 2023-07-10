@@ -79,23 +79,37 @@ async def get_quote_data(request):
     print(d)
     return web.json_response(json.dumps(d, default=str))
 
-count = 0
+# async def trading_algo(ws):
+
+async def subscribe_task(ws, symbols, bot):
+    # print("subs", symbols)
+    bot.subscribe(symbols, ws)
+
+async def unsubscribe_task(symbols, bot):
+    # print("unsubs", symbols)
+    bot.unsubscribe(symbols)
+
 @alpacaRoutes.get('/ws')
 async def websocket_handler(request):
 
     ws = web.WebSocketResponse()
     await ws.prepare(request)
+    # task = request.app.loop.create_task(trading_algo(ws))
 
     await ws.send_str("Websocket connected!!!")
+    request_id = request['request_id']
+    print("request id: ", request_id)
 
     try:
         async for msg in ws:
             print(msg)
             if msg.type == aiohttp.WSMsgType.TEXT:
                 if msg.data == 'close':
-                    for key in conns:
-                        conns[key].stop()
-                        del conns[key]
+                    # for key in conns:
+                    #     conns[key].stop()
+                    #     del conns[key]
+                    conns[request_id].stop()
+                    del conns[request_id]
                     await ws.close()
                 else:
                     data = json.loads(msg.data)
@@ -106,22 +120,22 @@ async def websocket_handler(request):
 
                         if type == 'us_equity' or type == 'crypto':
                             liveBot = AlpacaRealTimeBot(type)
-                            await liveBot.subscribe(symbols, ws)
-                            global count
-                            count += 1
-                            conns[str(count)] = liveBot
+                            task = request.app.loop.create_task(subscribe_task(ws, symbols, liveBot))
+                            # liveBot.subscribe(symbols, ws)
+                            conns[request_id] = liveBot
                         else:
                             print('ws connection closed with exception %s' %
                                 ws.exception())
                             return
                     elif action == "unsubscribe":
-                        print("Unsubscribing", conns)
                         symbols = data['symbols']
-                        for key in conns:
-                            print(key)
-                            conns[key].unsubscribe(symbols)
-                            conns[key].stop()
-                            del conns[key]
+                        # for key in conns:
+                        #     print(key)
+                        #     conns[key].unsubscribe(symbols)
+                        #     del conns[key]
+                        conns[request_id].unsubscribe(symbols)
+                        del conns[request_id]
+                        await ws.close()
 
             elif msg.type == aiohttp.WSMsgType.ERROR:
                 print('ws connection closed with exception %s' %

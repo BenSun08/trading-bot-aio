@@ -1,3 +1,4 @@
+import asyncio
 from alpaca.trading.client import TradingClient
 from alpaca.trading.stream import TradingStream
 from alpaca.trading.requests import GetAssetsRequest, MarketOrderRequest, GetOrdersRequest
@@ -124,24 +125,27 @@ class AlpacaRealTimeBot:
 
         self.type = type 
 
-    async def subscribe(self, symbols, ws):
+    def subscribe(self, symbols, ws):
         async def quote_handler(data):
             rsp = data.json()
             # print(rsp)
             await ws.send_json(rsp)
+            await asyncio.sleep(0)
 
         async def trade_handler(data):
             rsp = data.json()
             # print(rsp)
             await ws.send_json(rsp)
+            await asyncio.sleep(0)
         
         async def updated_bar_handler(data):
             rsp = data.json()
             # print(rsp)
             await ws.send_json(rsp)
+            await asyncio.sleep(0)
 
-        # self.data_stream.subscribe_quotes(quote_handler, *symbols)
-        # self.data_stream.subscribe_trades(trade_handler, *symbols)
+        self.data_stream.subscribe_quotes(quote_handler, *symbols)
+        self.data_stream.subscribe_trades(trade_handler, *symbols)
         self.data_stream.subscribe_updated_bars(updated_bar_handler, *symbols)
         
         try:
@@ -154,17 +158,19 @@ class AlpacaRealTimeBot:
             self.data_stream.run()
 
     
-    def unsubscribe(self, symbols):
-        print("unsubscribing...")
+    async def unsubscribe(self, symbols):
+        print("unsubscribing...", symbols)
         # self.data_stream._unsubscribe()
         self.data_stream.unsubscribe_quotes(*symbols)
         self.data_stream.unsubscribe_trades(*symbols)
         self.data_stream.unsubscribe_updated_bars(*symbols)
-        self.data_stream.stop()
+        await self.stop()
 
 
-    def stop(self):
+    async def stop(self):
         self.data_stream.stop()
+        await self.data_stream.stop_ws()
+        await self.data_stream.close()
 
 
     def subscribe_trade_updates(self):
