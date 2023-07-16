@@ -126,13 +126,21 @@ class AlpacaRealTimeBot:
         self.type = type
         self.sample_count = 0
         self.sample_rate = 5
+        self.trading = False
+    
+    def set_trading(self, trading):
+        self.trading = trading
 
-    async def subscribe(self, symbols, ws):
+    async def subscribe(self, symbols, ws, action_callback):
         print("subscribing...", symbols)
         async def quote_handler(data):
             rsp = data.json()
             if self.sample_count % self.sample_rate == 0:
                 await ws.send_json(rsp)
+                if self.trading:
+                    res = await action_callback(rsp)
+                    await ws.send_json(res)
+
             self.sample_count += 1
 
         async def trade_handler(data):

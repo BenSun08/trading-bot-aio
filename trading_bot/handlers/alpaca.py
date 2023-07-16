@@ -6,6 +6,9 @@ import nest_asyncio
 nest_asyncio.apply()
 
 from .alpaca_bots import AlpacaTradeBot, AlpacaDataBot, AlpacaRealTimeBot
+from ..utils import DateTimeEncoder
+# from .load_model import load_model, make_action
+
 
 alpacaApp = web.Application()
 alpacaRoutes = web.RouteTableDef()
@@ -13,7 +16,7 @@ alpacaRoutes = web.RouteTableDef()
 tradeBot = AlpacaTradeBot()
 dataBots = {
     "crypto": AlpacaDataBot("crypto"),
-    "stock": AlpacaDataBot("stock")
+    "us_equity": AlpacaDataBot("stock")
 }
 conns = {}
 
@@ -81,11 +84,93 @@ async def get_quote_data(request):
     return web.json_response(json.dumps(d, default=str))
 
 
-async def unsubscribe_task(symbols, bot):
-    # print("unsubs", symbols)
-    bot.unsubscribe(symbols)
+# async def unsubscribe_task(symbols, bot):
+#     # print("unsubs", symbols)
+#     bot.unsubscribe(symbols)
 
 background_tasks = set()
+# @alpacaRoutes.get('/ws')
+# async def websocket_handler(request):
+
+#     ws = web.WebSocketResponse()
+#     await ws.prepare(request)
+#     # task = request.app.loop.create_task(trading_algo(ws))
+
+#     await ws.send_str("Websocket connected!!!")
+#     request_id = request['request_id']
+#     print("request id: ", request_id)
+
+#     try:
+#         task = None
+#         async for msg in ws:
+#             print(msg)
+#             if msg.type == aiohttp.WSMsgType.TEXT:
+#                 if msg.data == 'close':
+#                     if request_id in conns:
+#                         await conns[request_id].stop()
+#                         del conns[request_id]
+#                     await ws.close()
+#                 else:
+#                     data = json.loads(msg.data)
+#                     action = data["action"]
+#                     if action == "subscribe":
+#                         type = data['type']
+#                         symbols = data['symbols']
+#                         if type == 'us_equity' or type == 'crypto':
+#                             task_load_model = request.app.loop.create_task(load_model())
+
+#                             async def make_order(side):
+#                                 o = tradeBot.make_order(symbols, 1, side)
+#                                 order = { "symbol": o.symbol, "qty": o. qty, "side": o.side, "filled_avg_price": o.filled_avg_price }
+#                                 return order
+                            
+#                             agent = await task_load_model
+#                             async def action_callback(data):
+#                                 res = await make_action(data, agent, make_order)
+#                                 return res
+
+#                             if request_id in conns:
+#                                 task = request.app.loop.create_task(conns[request_id].subscribe(symbols, ws, action_callback))
+#                             else:
+#                                 liveBot = AlpacaRealTimeBot(type)
+#                                 task = request.app.loop.create_task(liveBot.subscribe(symbols, ws, action_callback))
+#                                 conns[request_id] = liveBot
+#                             background_tasks.add(task)
+#                             task.add_done_callback(background_tasks.discard)
+#                         else:
+#                             print('ws connection closed with exception %s' %
+#                                 ws.exception())
+#                             return
+#                     elif action == "unsubscribe":
+#                         symbols = data['symbols']
+#                         if request_id in conns:
+#                             await conns[request_id].unsubscribe(symbols)
+#                             task.cancel()
+#                             try:
+#                                 await task
+#                             except asyncio.CancelledError:
+#                                 print("Subscription cancelled!!!")
+#                         # del conns[request_id]
+#                         # await ws.close()
+                    
+#                     elif action == "start-trading":
+#                         if request_id in conns:
+#                             conns[request_id].set_trading(True)
+#                     elif action == "stop-trading":
+#                         if request_id in conns:
+#                             conns[request_id].set_trading(False)
+#             elif msg.type == aiohttp.WSMsgType.CLOSED:
+#                 print('ws connection closed')
+#                 break
+#             elif msg.type == aiohttp.WSMsgType.ERROR:
+#                 print('ws connection closed with exception %s' %ws.exception())
+#     finally:
+#         await ws.close()
+#         print('websocket connection closed')
+
+
+#     return ws
+
 @alpacaRoutes.get('/ws')
 async def websocket_handler(request):
 
@@ -97,8 +182,11 @@ async def websocket_handler(request):
     request_id = request['request_id']
     print("request id: ", request_id)
 
+
     try:
+        subscribed = False
         task = None
+
         async for msg in ws:
             print(msg)
             if msg.type == aiohttp.WSMsgType.TEXT:
@@ -110,42 +198,48 @@ async def websocket_handler(request):
                 else:
                     data = json.loads(msg.data)
                     action = data["action"]
+
                     if action == "subscribe":
                         type = data['type']
                         symbols = data['symbols']
                         if type == 'us_equity' or type == 'crypto':
-                            if request_id in conns:
-                                task = request.app.loop.create_task(conns[request_id].subscribe(symbols, ws))
-                            else:
-                                liveBot = AlpacaRealTimeBot(type)
-                                task = request.app.loop.create_task(liveBot.subscribe(symbols, ws))
-                                conns[request_id] = liveBot
-                            background_tasks.add(task)
-                            task.add_done_callback(background_tasks.discard)
+                            subscribed = True
+
+                            async def get_data():
+                                while subscribed:
+                                    d = dataBots[type].get_latest_quote(symbol_or_symbols=symbols)
+                                    res = {}
+                                    for symbol in d:
+                                        res[symbol] = {}
+                                        res[symbol]['symbol'] = d[symbol].symbol
+                                        res[symbol]['ask_price'] = d[symbol].ask_price
+                                        res[symbol]['ask_size'] = d[symbol].ask_size
+                                        res[symbol]['bid_price'] = d[symbol].bid_price
+                                        res[symbol]['bid_size'] = d[symbol].bid_size
+                                    print(res)
+                                    await asyncio.sleep(2)
+                                    await ws.send_json(res)
+                            task = request.app.loop.create_task(get_data())
                         else:
                             print('ws connection closed with exception %s' %
                                 ws.exception())
                             return
+                        
                     elif action == "unsubscribe":
                         symbols = data['symbols']
-                        if request_id in conns:
-                            await conns[request_id].unsubscribe(symbols)
-                            task.cancel()
-                            try:
-                                await task
-                            except asyncio.CancelledError:
-                                print("Subscription cancelled!!!")
-                        # del conns[request_id]
-                        # await ws.close()
+                        subscribed = False
+                        task.cancel()
+                        try:
+                            await task
+                        except asyncio.CancelledError:
+                            print("Subscription cancelled!!!")
                     
-                    elif action == "start_trading":
-                        async def buy():
-                            side = request.match_info['side']
-                            qty = data["qty"]
-                            symbol = data["symbol"]
-                            o = tradeBot.make_order(symbol, qty, side)
-                            order = { "symbol": o.symbol, "qty": o. qty, "side": o.side, "filled_avg_price": o.filled_avg_price }
-                            pass
+                    elif action == "start-trading":
+                        if request_id in conns:
+                            conns[request_id].set_trading(True)
+                    elif action == "stop-trading":
+                        if request_id in conns:
+                            conns[request_id].set_trading(False)
             elif msg.type == aiohttp.WSMsgType.CLOSED:
                 print('ws connection closed')
                 break
