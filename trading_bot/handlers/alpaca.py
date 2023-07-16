@@ -1,3 +1,4 @@
+import asyncio
 import aiohttp
 from aiohttp import web
 import json
@@ -79,16 +80,12 @@ async def get_quote_data(request):
     print(d)
     return web.json_response(json.dumps(d, default=str))
 
-# async def trading_algo(ws):
-
-async def subscribe_task(ws, symbols, bot):
-    # print("subs", symbols)
-    bot.subscribe(symbols, ws)
 
 async def unsubscribe_task(symbols, bot):
     # print("unsubs", symbols)
     bot.unsubscribe(symbols)
 
+background_tasks = set()
 @alpacaRoutes.get('/ws')
 async def websocket_handler(request):
 
@@ -101,15 +98,14 @@ async def websocket_handler(request):
     print("request id: ", request_id)
 
     try:
+        task = None
         async for msg in ws:
             print(msg)
             if msg.type == aiohttp.WSMsgType.TEXT:
                 if msg.data == 'close':
-                    # for key in conns:
-                    #     conns[key].stop()
-                    #     del conns[key]
-                    conns[request_id].stop()
-                    del conns[request_id]
+                    if request_id in conns:
+                        await conns[request_id].stop()
+                        del conns[request_id]
                     await ws.close()
                 else:
                     data = json.loads(msg.data)
@@ -117,29 +113,44 @@ async def websocket_handler(request):
                     if action == "subscribe":
                         type = data['type']
                         symbols = data['symbols']
-
                         if type == 'us_equity' or type == 'crypto':
-                            liveBot = AlpacaRealTimeBot(type)
-                            task = request.app.loop.create_task(subscribe_task(ws, symbols, liveBot))
-                            # liveBot.subscribe(symbols, ws)
-                            conns[request_id] = liveBot
+                            if request_id in conns:
+                                task = request.app.loop.create_task(conns[request_id].subscribe(symbols, ws))
+                            else:
+                                liveBot = AlpacaRealTimeBot(type)
+                                task = request.app.loop.create_task(liveBot.subscribe(symbols, ws))
+                                conns[request_id] = liveBot
+                            background_tasks.add(task)
+                            task.add_done_callback(background_tasks.discard)
                         else:
                             print('ws connection closed with exception %s' %
                                 ws.exception())
                             return
                     elif action == "unsubscribe":
                         symbols = data['symbols']
-                        # for key in conns:
-                        #     print(key)
-                        #     conns[key].unsubscribe(symbols)
-                        #     del conns[key]
-                        conns[request_id].unsubscribe(symbols)
-                        del conns[request_id]
-                        await ws.close()
-
+                        if request_id in conns:
+                            await conns[request_id].unsubscribe(symbols)
+                            task.cancel()
+                            try:
+                                await task
+                            except asyncio.CancelledError:
+                                print("Subscription cancelled!!!")
+                        # del conns[request_id]
+                        # await ws.close()
+                    
+                    elif action == "start_trading":
+                        async def buy():
+                            side = request.match_info['side']
+                            qty = data["qty"]
+                            symbol = data["symbol"]
+                            o = tradeBot.make_order(symbol, qty, side)
+                            order = { "symbol": o.symbol, "qty": o. qty, "side": o.side, "filled_avg_price": o.filled_avg_price }
+                            pass
+            elif msg.type == aiohttp.WSMsgType.CLOSED:
+                print('ws connection closed')
+                break
             elif msg.type == aiohttp.WSMsgType.ERROR:
-                print('ws connection closed with exception %s' %
-                    ws.exception())
+                print('ws connection closed with exception %s' %ws.exception())
     finally:
         await ws.close()
         print('websocket connection closed')

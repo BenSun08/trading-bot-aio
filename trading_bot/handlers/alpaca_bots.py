@@ -123,30 +123,30 @@ class AlpacaRealTimeBot:
             if type == "crypto" else StockDataStream(API_KEY, SECRET_KEY)
         self.trading_stream = TradingStream(API_KEY, SECRET_KEY, paper=True)
 
-        self.type = type 
+        self.type = type
+        self.sample_count = 0
+        self.sample_rate = 5
 
-    def subscribe(self, symbols, ws):
+    async def subscribe(self, symbols, ws):
+        print("subscribing...", symbols)
         async def quote_handler(data):
             rsp = data.json()
-            # print(rsp)
-            await ws.send_json(rsp)
-            await asyncio.sleep(0)
+            if self.sample_count % self.sample_rate == 0:
+                await ws.send_json(rsp)
+            self.sample_count += 1
 
         async def trade_handler(data):
             rsp = data.json()
             # print(rsp)
             await ws.send_json(rsp)
-            await asyncio.sleep(0)
         
         async def updated_bar_handler(data):
             rsp = data.json()
             # print(rsp)
             await ws.send_json(rsp)
-            await asyncio.sleep(0)
 
         self.data_stream.subscribe_quotes(quote_handler, *symbols)
-        self.data_stream.subscribe_trades(trade_handler, *symbols)
-        self.data_stream.subscribe_updated_bars(updated_bar_handler, *symbols)
+        # self.data_stream.subscribe_ dated_bars(updated_bar_handler, *symbols)
         
         try:
             self.data_stream.run()
@@ -162,9 +162,12 @@ class AlpacaRealTimeBot:
         print("unsubscribing...", symbols)
         # self.data_stream._unsubscribe()
         self.data_stream.unsubscribe_quotes(*symbols)
-        self.data_stream.unsubscribe_trades(*symbols)
-        self.data_stream.unsubscribe_updated_bars(*symbols)
-        await self.stop()
+        # self.data_stream.unsubscribe_trades(*symbols)
+        # self.data_stream.unsubscribe_updated_bars(*symbols)
+        # self.data_stream.stop()
+        # await self.stop()
+        await asyncio.sleep(0)
+
 
 
     async def stop(self):
