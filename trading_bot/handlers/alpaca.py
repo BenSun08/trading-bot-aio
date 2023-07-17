@@ -179,8 +179,8 @@ async def websocket_handler(request):
     # task = request.app.loop.create_task(trading_algo(ws))
 
     await ws.send_str("Websocket connected!!!")
-    request_id = request['request_id']
-    print("request id: ", request_id)
+    # request_id = request['request_id']
+    # print("request id: ", request_id)
 
 
     try:
