@@ -234,8 +234,12 @@ async def websocket_handler(request):
                                     res['bid_size'] = d[symbol].bid_size
                                     await ws.send_json(res)
                                     if trading:
-                                        trade_res = await make_action(res, agent, make_order_callback)
-                                        await ws.send_json(trade_res)
+                                        try:
+                                            trade_res = await make_action(res, agent, make_order_callback)
+                                            print("trade result: ", trade_res)
+                                            await ws.send_json(trade_res)
+                                        except Exception as e:
+                                            print("make order error: ", e)
 
                                     await asyncio.sleep(2)
                             subsTask = request.app.loop.create_task(get_data())
