@@ -1,4 +1,4 @@
-from ..ext.trading_bot.agent import Agent
+from .agent import Agent
 import asyncio
 
 model_name = "trading_bot/models/doubledqn_ggl_30.h5"
