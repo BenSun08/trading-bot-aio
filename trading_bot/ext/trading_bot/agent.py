@@ -195,4 +195,5 @@ class Agent:
         self.model.save("models/{}_{}.h5".format(self.model_name, episode))
 
     def load(self):
-        return load_model("models/" + self.model_name, custom_objects=self.custom_objects)
+        # return load_model("models/" + self.model_name, custom_objects=self.custom_objects)
+        return load_model(self.model_name, custom_objects=self.custom_objects)

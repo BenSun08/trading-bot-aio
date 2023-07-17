@@ -7,7 +7,7 @@ nest_asyncio.apply()
 
 from .alpaca_bots import AlpacaTradeBot, AlpacaDataBot, AlpacaRealTimeBot
 from ..utils import DateTimeEncoder
-# from .load_model import load_model, make_action
+from .load_model import load_model, make_action
 
 
 alpacaApp = web.Application()
@@ -185,15 +185,15 @@ async def websocket_handler(request):
 
     try:
         subscribed = False
-        task = None
+        subsTask = None
+        trading = False
 
         async for msg in ws:
             print(msg)
             if msg.type == aiohttp.WSMsgType.TEXT:
                 if msg.data == 'close':
-                    if request_id in conns:
-                        await conns[request_id].stop()
-                        del conns[request_id]
+                    subscribed = False
+                    trading = False
                     await ws.close()
                 else:
                     data = json.loads(msg.data)
@@ -205,21 +205,40 @@ async def websocket_handler(request):
                         if type == 'us_equity' or type == 'crypto':
                             subscribed = True
 
+                            agent = await asyncio.to_thread(load_model)
+                            symbol = symbols[0]
+
+                            async def make_order_callback(side):
+                                print("make order...")
+                                o = tradeBot.make_order(symbol, 1, side)
+                                order = { "symbol": o.symbol, "qty": o. qty, "side": o.side, "filled_avg_price": o.filled_avg_price }
+                                print("order made...: ", order)
+                                return order
+
+
                             async def get_data():
                                 while subscribed:
                                     d = dataBots[type].get_latest_quote(symbol_or_symbols=symbols)
                                     res = {}
-                                    for symbol in d:
-                                        res[symbol] = {}
-                                        res[symbol]['symbol'] = d[symbol].symbol
-                                        res[symbol]['ask_price'] = d[symbol].ask_price
-                                        res[symbol]['ask_size'] = d[symbol].ask_size
-                                        res[symbol]['bid_price'] = d[symbol].bid_price
-                                        res[symbol]['bid_size'] = d[symbol].bid_size
-                                    print(res)
-                                    await asyncio.sleep(2)
+                                    # for symbol in d:
+                                        # res[symbol] = {}
+                                        # res[symbol]['symbol'] = d[symbol].symbol
+                                        # res[symbol]['ask_price'] = d[symbol].ask_price
+                                        # res[symbol]['ask_size'] = d[symbol].ask_size
+                                        # res[symbol]['bid_price'] = d[symbol].bid_price
+                                        # res[symbol]['bid_size'] = d[symbol].bid_size
+                                    res['symbol'] = d[symbol].symbol
+                                    res['ask_price'] = d[symbol].ask_price
+                                    res['ask_size'] = d[symbol].ask_size
+                                    res['bid_price'] = d[symbol].bid_price
+                                    res['bid_size'] = d[symbol].bid_size
                                     await ws.send_json(res)
-                            task = request.app.loop.create_task(get_data())
+                                    if trading:
+                                        trade_res = await make_action(res, agent, make_order_callback)
+                                        await ws.send_json(trade_res)
+
+                                    await asyncio.sleep(2)
+                            subsTask = request.app.loop.create_task(get_data())
                         else:
                             print('ws connection closed with exception %s' %
                                 ws.exception())
@@ -228,18 +247,20 @@ async def websocket_handler(request):
                     elif action == "unsubscribe":
                         symbols = data['symbols']
                         subscribed = False
-                        task.cancel()
+                        trading = False
+                        subsTask.cancel()
                         try:
-                            await task
+                            await subsTask
                         except asyncio.CancelledError:
                             print("Subscription cancelled!!!")
                     
                     elif action == "start-trading":
-                        if request_id in conns:
-                            conns[request_id].set_trading(True)
+                        print("start trading...")
+                        trading = True
+
                     elif action == "stop-trading":
-                        if request_id in conns:
-                            conns[request_id].set_trading(False)
+                        trading = False
+
             elif msg.type == aiohttp.WSMsgType.CLOSED:
                 print('ws connection closed')
                 break

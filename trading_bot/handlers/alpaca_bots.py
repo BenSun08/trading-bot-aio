@@ -58,7 +58,7 @@ class AlpacaTradeBot:
         market_order = self.trading_client.submit_order(
                         order_data=market_order_data
                     )
-        print(market_order)
+        # print(market_order)
         return market_order
         
     def get_orders(self, status, side):
