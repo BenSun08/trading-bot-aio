@@ -22,7 +22,7 @@ python -m trading_bot.main
 
 Connect to AWS EC2 instance
 ```sh
-ssh -i "capstone_trading_bot.pem" ec2-user@ec2-3-26-242-200.ap-southeast-2.compute.amazonaws.com
+ssh -i "trading_bot.pem" ec2-user@ec2-3-25-177-40.ap-southeast-2.compute.amazonaws.com
 ```
 
 ### Cofiguration of **supervisor**

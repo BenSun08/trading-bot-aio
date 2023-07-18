@@ -7,7 +7,7 @@ nest_asyncio.apply()
 
 from .alpaca_bots import AlpacaTradeBot, AlpacaDataBot, AlpacaRealTimeBot
 from ..utils import DateTimeEncoder
-from .load_model import load_model, make_action
+# from .load_model import load_model, make_action
 
 
 alpacaApp = web.Application()
@@ -205,7 +205,7 @@ async def websocket_handler(request):
                         if type == 'us_equity' or type == 'crypto':
                             subscribed = True
 
-                            agent = await asyncio.to_thread(load_model)
+                            # agent = await asyncio.to_thread(load_model)
                             symbol = symbols[0]
 
                             async def make_order_callback(side):
@@ -235,9 +235,10 @@ async def websocket_handler(request):
                                     await ws.send_json(res)
                                     if trading:
                                         try:
-                                            trade_res = await make_action(res, agent, make_order_callback)
-                                            print("trade result: ", trade_res)
-                                            await ws.send_json(trade_res)
+                                            pass
+                                            # trade_res = await make_action(res, agent, make_order_callback)
+                                            # print("trade result: ", trade_res)
+                                            # await ws.send_json(trade_res)
                                         except Exception as e:
                                             print("make order error: ", e)
 
