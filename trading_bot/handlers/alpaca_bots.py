@@ -35,9 +35,13 @@ class AlpacaTradeBot:
     def get_all_assets(self, type="crypto"):
         search_params = GetAssetsRequest(asset_class=type)
         assets = self.trading_client.get_all_assets(search_params)
-        # print(assets[0])
+        print(assets[0])
         parsed_assets = list(map(lambda a: { "id": a.id.hex, "name": a.name,
-        "symbol": a.symbol, "tradable": a.tradable }, assets))
+        "symbol": a.symbol, "tradable": a.tradable, "marginable": a.marginable,
+        "shortable": a.shortable, "easy_to_borrow": a.easy_to_borrow, "fractionable": a.fractionable,
+        "min_order_size": a.min_order_size, "min_trade_increment": a.min_trade_increment,
+        "price_increment": a.price_increment, "maintenance_margin_requirement": a.maintenance_margin_requirement,
+        }, assets))
         return parsed_assets
     
     def get_asset(self, id_or_symbol):
