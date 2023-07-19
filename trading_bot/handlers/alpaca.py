@@ -219,7 +219,7 @@ async def websocket_handler(request):
                             async def get_data():
                                 while subscribed:
                                     d = dataBots[type].get_latest_quote(symbol_or_symbols=symbols)
-                                    print(d)
+                                    # print(d)
                                     res = {}
                                     # for symbol in d:
                                         # res[symbol] = {}
