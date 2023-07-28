@@ -1,6 +1,7 @@
 from .agent import Agent
 from collections import deque
 import numpy as np
+from random import randint
 
 window_size = 10
 model_name = "trading_bot/models/doubledqn_ggl_30.h5"
@@ -12,7 +13,7 @@ def load_model():
     return agent
 
 q = deque(maxlen=window_size)
-async def make_action(data, agent, make_order):
+async def make_action(data, agent, make_order, test = False):
     print("data: ", data)
     bid_price = data['bid_price']
     ask_price = data['ask_price']
@@ -27,8 +28,11 @@ async def make_action(data, agent, make_order):
     try:
         if len(q) == window_size:
             x = np.reshape(list(q), (1, -1))
-            print(x)
-            action = agent.act(x, is_eval=True)
+            if test:
+                a = randint(0, 2)
+                action = (a, 1.)
+            else:    
+                action = agent.act(x, is_eval=True)
         else:
             return {'action': 'hold', 'cost':0., 'profit':0. }
     except Exception as e:
@@ -42,24 +46,28 @@ async def make_action(data, agent, make_order):
     act = action[0]
     prob = action[1]
 
-    if act == 1:
-        actStr = 'buy'
-        cost =  bid_price * bid_size
-        # if balance >= cost:
-        cost, profit = bid_price * bid_size, 0.
-        order = await make_order('buy')
+    try:
+        if act == 1:
+            actStr = 'buy'
+            cost =  bid_price * bid_size
+            # if balance >= cost:
+            cost, profit = bid_price * bid_size, 0.
+            order = await make_order('buy')
+            
+        # SELL
+        elif act == 2:
+            actStr = 'sell'
+            cost, profit = 0., ask_price * ask_size
+            order = await make_order('sell')
+            
+        # HOLD
+        else:
+            return {'action': 'hold', 'cost':0., 'profit':0. }
+    except Exception as e:
+        print("algo error: ", e)
+        order = { "error": str(e) }
 
-        print("buy order made: ", order)
-        
-    # SELL
-    elif act == 2:
-        actStr = 'sell'
-        cost, profit = 0., ask_price * ask_size
-        order = await make_order('sell')
-        
-    # HOLD
-    else:
-        return {'action': 'hold', 'cost':0., 'profit':0. }
+    print("buy order made: ", order)
 
     res = { 'action': actStr, 'cost':cost, 'profit':profit }
     return { **res, **order }

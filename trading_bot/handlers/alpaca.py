@@ -187,6 +187,7 @@ async def websocket_handler(request):
         subscribed = False
         subsTask = None
         trading = False
+        testing = False
 
         async for msg in ws:
             print(msg)
@@ -221,13 +222,6 @@ async def websocket_handler(request):
                                     d = dataBots[type].get_latest_quote(symbol_or_symbols=symbols)
                                     # print(d)
                                     res = {}
-                                    # for symbol in d:
-                                        # res[symbol] = {}
-                                        # res[symbol]['symbol'] = d[symbol].symbol
-                                        # res[symbol]['ask_price'] = d[symbol].ask_price
-                                        # res[symbol]['ask_size'] = d[symbol].ask_size
-                                        # res[symbol]['bid_price'] = d[symbol].bid_price
-                                        # res[symbol]['bid_size'] = d[symbol].bid_size
                                     res['symbol'] = d[symbol].symbol
                                     res['ask_price'] = d[symbol].ask_price
                                     res['ask_size'] = d[symbol].ask_size
@@ -237,12 +231,12 @@ async def websocket_handler(request):
                                     if trading:
                                         try:
                                             # pass
-                                            trade_res = await make_action(res, agent, make_order_callback)
+                                            trade_res = await make_action(res, agent, make_order_callback, test = testing)
                                             print("trade result: ", trade_res)
                                             await ws.send_json(trade_res)
                                         except Exception as e:
-                                            print("make order error: ", e)
-                                            await ws.send_json({ 'msg_type': 'error', **e})
+                                            print("make action error: ", e)
+                                            await ws.send_json({ 'msg_type': 'error', e: str(e) })
 
                                     await asyncio.sleep(2)
                             subsTask = request.app.loop.create_task(get_data())
@@ -264,9 +258,14 @@ async def websocket_handler(request):
                     elif action == "start-trading":
                         print("start trading...")
                         trading = True
+                        testing = False
 
                     elif action == "stop-trading":
                         trading = False
+
+                    elif action == "test":
+                        trading = True
+                        testing = True
 
             elif msg.type == aiohttp.WSMsgType.CLOSED:
                 print('ws connection closed')
