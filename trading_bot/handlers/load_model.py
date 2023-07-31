@@ -4,7 +4,7 @@ import numpy as np
 from random import randint
 
 window_size = 10
-model_name = "trading_bot/models/doubledqn_ggl_30.h5"
+model_name = "trading_bot/models/doubledqn_ggl_300.h5"
 strategy = 'dqn'
 pretrained = True
 
