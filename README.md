@@ -124,6 +124,16 @@ tmux rename-session - t [new-name]
 
 ### Postgres
 
+#### In Linux
+
+```sh
+sudo -i -u postgres
+```
+change the password
+```sh
+postgres=# \password postgres
+```
+
 show tables
 
 ```sh

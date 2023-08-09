@@ -51,8 +51,9 @@ def fetch_news(topic, date, num_news):
         print("Error:", response.status_code, response.json())
 
 async def get_score(news, topic):
-    cookies = json.loads(open("trading_bot/bing_cookies_*.json", encoding="utf-8").read()) # 可能会忽略 cookie 选项
-    bot = await Chatbot.create(cookies=cookies)
+    # cookies = json.loads(open("trading_bot/bing_cookies_*.json", encoding="utf-8").read()) # 可能会忽略 cookie 选项
+    # bot = await Chatbot.create(cookies=cookies)
+    bot = await Chatbot.create()
     prompt = f"Given news as follow: \"{news['description']}\" Give me a score ranges from 0-9 " \
             f"to show whether it is a good news or a bad news for {topic}. " \
             f"Your answer should strictly follow this format: The score is ..., e.g., if the score is 5, then return \"The score is 5.\""
