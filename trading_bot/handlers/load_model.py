@@ -19,7 +19,7 @@ model_name = "trading_bot/models/GOOGscore_doubledqn_50.h5"
 strategy = 'dqn'
 pretrained = True
 
-def load_model(topic):
+def load_model():
     agent = Agent(window_size, strategy=strategy, pretrained=pretrained, model_name=model_name)
     return agent
     # score = await get_score_before_trade(topic)
@@ -51,9 +51,9 @@ def fetch_news(topic, date, num_news):
         print("Error:", response.status_code, response.json())
 
 async def get_score(news, topic):
-    # cookies = json.loads(open("trading_bot/bing_cookies_*.json", encoding="utf-8").read()) # 可能会忽略 cookie 选项
-    # bot = await Chatbot.create(cookies=cookies)
-    bot = await Chatbot.create()
+    cookies = json.loads(open("trading_bot/bing_cookies_*.json", encoding="utf-8").read()) # 可能会忽略 cookie 选项
+    bot = await Chatbot.create(cookies=cookies)
+    # bot = await Chatbot.create()
     prompt = f"Given news as follow: \"{news['description']}\" Give me a score ranges from 0-9 " \
             f"to show whether it is a good news or a bad news for {topic}. " \
             f"Your answer should strictly follow this format: The score is ..., e.g., if the score is 5, then return \"The score is 5.\""
@@ -83,7 +83,7 @@ def get_stock_data(data):
     except:
         print("input sequence requires minimal length of {}, while current shape is {}".format(window_size, data.size()))
 
-async def get_score_before_trade(topic):
+async def get_score_before_trade(topic, ws):
     print("get score before trade")
     topic = topic.split("/")[0]
     cur_date_str = datetime.today().strftime('%Y-%m-%d') # need check the format, currently assumed as "YYYY-MM-DD"
@@ -103,23 +103,29 @@ async def get_score_before_trade(topic):
 
             score_cur_week = []
             for j, article in enumerate(articles,1):
-                answer = asyncio.run(get_score(article, topic))
-                if answer[14].isdigit():
-                    score_cur_week.append(int(answer[14]))
-                else: continue
+                # answer = asyncio.run(get_score(article, topic))
+                # if answer[14].isdigit():
+                #     score_cur_week.append(int(answer[14]))
+                # else: continue
+                score_cur_week.append(6)
             score_cur_week = np.array(score_cur_week)
             if len(score_cur_week) == 0:
                 score = 4 # mean value
             else:
                 score = score_cur_week.mean()
 
-            await cur.execute(f"INSERT INTO scores (topic, date, score) VALUES ('{topic}', '{cur_date_str}', {score});")
+            await ws.send_json({ "articles": articles, "score": score })
+
+            comma = "'s"
+            await cur.execute(f"INSERT INTO scores (topic, date, articles,score) VALUES ('{topic}', '{cur_date_str}', '{json.dumps(articles, default=str).replace(comma, ' s')}', {score});")
             conn.close()
 
             scores_arr = np.ones_like(window_size) * score
             return scores_arr
         else:
-            score = ret[0][3]
+            articles = json.loads(ret[0][3])
+            score = ret[0][4]
+            await ws.send_json({ "articles": articles, "score": score })
             scores_arr = np.ones_like(window_size) * score
             conn.close()
             return scores_arr

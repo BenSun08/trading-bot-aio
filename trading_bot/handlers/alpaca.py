@@ -214,10 +214,11 @@ async def websocket_handler(request):
                             subscribed = True
 
                             symbol = symbols[0]
-                            agent  = asyncio.to_thread(load_model)
+                            # agent = asyncio.to_thread(load_model)
+                            agent = load_model()
                             # res = asyncio.to_thread(get_score_before_trade, symbol)
                             # score = await res
-                            score = await get_score_before_trade(symbol)
+                            score = await get_score_before_trade(symbol, ws)
 
                             async def make_order_callback(side):
                                 print("make order...")

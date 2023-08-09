@@ -26,6 +26,19 @@
     },
     {
         "domain": ".bing.com",
+        "expirationDate": 1691666322.504836,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "GC",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "zpVTYW05Imp3NoOFbENvaM8P2qLDyb1oTbRsJ5BqEqTCsJIWjVsHuEzxi6629w5pi9hJrLhQ85rkCsBj3ggxVg"
+    },
+    {
+        "domain": ".bing.com",
         "expirationDate": 1691602210.180052,
         "hostOnly": false,
         "httpOnly": true,
@@ -39,7 +52,7 @@
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1726139024.601928,
+        "expirationDate": 1726144839.720844,
         "hostOnly": false,
         "httpOnly": false,
         "name": "SRCHHPGUSR",
@@ -48,7 +61,7 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "SRCHLANG=en&DM=1&THEME=1&WTS=63819375843&IG=802C344E5CCE4A44B0AAB9CFA3F28A6E&PV=13.4.1&BRW=W&BRH=M&CW=1440&CH=789&SCW=1440&SCH=3596&DPR=2.0&UTC=480&EXLTT=3&HV=1691579021&PRVCW=1440&PRVCH=789"
+        "value": "SRCHLANG=en&DM=1&THEME=1&WTS=63819375843&IG=4A8C99B1122D4057B548BB617E7C382F&PV=13.4.1&BRW=W&BRH=M&CW=1440&CH=789&SCW=1440&SCH=789&DPR=2.0&UTC=480&EXLTT=4&HV=1691584840&PRVCW=1440&PRVCH=789"
     },
     {
         "domain": ".bing.com",
@@ -72,7 +85,7 @@
         "secure": true,
         "session": true,
         "storeId": null,
-        "value": "hit=1691582624462&t=4"
+        "value": "hit=1691588381123&t=4"
     },
     {
         "domain": ".bing.com",
@@ -101,7 +114,7 @@
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1699355021.08151,
+        "expirationDate": 1699360782.127123,
         "hostOnly": false,
         "httpOnly": true,
         "name": "ACL",
@@ -110,11 +123,11 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "AhCb4s9CZmeMwrNWXgPDKMpwlagBcXcuDyLT72-92axdGsB88_xz13eKiSkHL3qIpH-BOFcl-YOUFMng9moDlu43xqtFgWH6fVa_BQ0XPuNBBw"
+        "value": "AhCfUq63bgajDUTwg-7O79HAIBVk9T0rNTsYT0o-VWYAxL7CfOyAI55xRfehJDy5QAopNvpNIb3qb0nm518VVbjB-9AsmXpgxB80Ml2gDH0mjA"
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1723201421.14352,
+        "expirationDate": 1723207182.255636,
         "hostOnly": false,
         "httpOnly": false,
         "name": "_RwBf",
@@ -123,11 +136,11 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "mta=0&rc=3&rb=3&gb=0&rg=0&pc=3&mtu=0&rbb=0.0&g=0&cid=&clo=0&v=1&l=2023-08-09T07:00:00.0000000Z&lft=0001-01-01T00:00:00.0000000&aof=0&o=0&p=bingcopilotwaitlist&c=MY00IA&t=6783&s=2023-02-17T18:25:18.6503026+00:00&ts=2023-08-09T11:03:40.1289353+00:00&rwred=0&wls=2&wlb=0&lka=1&lkt=1&TH=&dci=0&e=SJ15e3l5FSXGLeqwYA1QP4mPZC9Lfb3JZRX3xyfD1w44oVoTT4Uq0BpYLGi9Mq3Wa9a0sf_DDQvgHhE3pkia_Q"
+        "value": "mta=0&rc=3&rb=3&gb=0&rg=0&pc=3&mtu=0&rbb=0.0&g=0&cid=&clo=0&v=4&l=2023-08-09T07:00:00.0000000Z&lft=0001-01-01T00:00:00.0000000&aof=0&o=0&p=bingcopilotwaitlist&c=MY00IA&t=6783&s=2023-02-17T18:25:18.6503026+00:00&ts=2023-08-09T12:39:41.2669316+00:00&rwred=0&wls=2&wlb=0&lka=1&lkt=1&TH=&dci=0&e=SJ15e3l5FSXGLeqwYA1QP4mPZC9Lfb3JZRX3xyfD1w44oVoTT4Uq0BpYLGi9Mq3Wa9a0sf_DDQvgHhE3pkia_Q"
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1726119151.227817,
+        "expirationDate": 1726144780.931913,
         "hostOnly": false,
         "httpOnly": false,
         "name": "_UR",
@@ -165,7 +178,7 @@
     },
     {
         "domain": "www.bing.com",
-        "expirationDate": 1725275314.129207,
+        "expirationDate": 1725280842.021237,
         "hostOnly": true,
         "httpOnly": true,
         "name": "MUIDB",
@@ -178,7 +191,7 @@
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1723115019,
+        "expirationDate": 1723115431,
         "hostOnly": false,
         "httpOnly": false,
         "name": "amp_6e403e",
@@ -187,7 +200,7 @@
         "secure": false,
         "session": false,
         "storeId": null,
-        "value": "j-d295miQT4uTz35WtJsGh...1h7cvesco.1h7cvesco.0.2.2"
+        "value": "j-d295miQT4uTz35WtJsGh...1h7cvesco.1h7cvre7v.0.2.2"
     },
     {
         "domain": ".bing.com",
@@ -204,7 +217,7 @@
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1726119151.278549,
+        "expirationDate": 1726144781.036271,
         "hostOnly": false,
         "httpOnly": false,
         "name": "_HPVN",
@@ -213,11 +226,11 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "CS=eyJQbiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiUCJ9LCJTYyI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiSCJ9LCJReiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiVCJ9LCJBcCI6dHJ1ZSwiTXV0ZSI6dHJ1ZSwiTGFkIjoiMjAyMy0wOC0wOVQwMDowMDowMFoiLCJJb3RkIjowLCJHd2IiOjAsIkRmdCI6bnVsbCwiTXZzIjowLCJGbHQiOjAsIkltcCI6NH0="
+        "value": "CS=eyJQbiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiUCJ9LCJTYyI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiSCJ9LCJReiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiVCJ9LCJBcCI6dHJ1ZSwiTXV0ZSI6dHJ1ZSwiTGFkIjoiMjAyMy0wOC0wOVQwMDowMDowMFoiLCJJb3RkIjowLCJHd2IiOjAsIkRmdCI6bnVsbCwiTXZzIjowLCJGbHQiOjAsIkltcCI6OH0="
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1726139020.09625,
+        "expirationDate": 1726144781.1472,
         "hostOnly": false,
         "httpOnly": false,
         "name": "ACLUSR",
@@ -226,7 +239,7 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "T=1691579020000"
+        "value": "T=1691584781000"
     },
     {
         "domain": ".bing.com",
@@ -269,7 +282,7 @@
     },
     {
         "domain": ".bing.com",
-        "expirationDate": 1699355019.065121,
+        "expirationDate": 1692793762.648727,
         "hostOnly": false,
         "httpOnly": true,
         "name": "OIDI",
@@ -278,7 +291,7 @@
         "secure": true,
         "session": false,
         "storeId": null,
-        "value": "ghBSIevHgKXLtMlB4TPvVMOYZdgZcqBKkmqtCa9OXEbKEejpsRRLwvto3QxJ1Kkm6htKzTL3bXpWzdINKitGAO27plBFt72OBs_usvSepSgYCfXQI40DRcLQohQ2Dhnvja0jdIjbxDCQJHBCjeYjqgliDYRezNWzdtLp5xomcQC_sI8ce2fKUnfEe-1tbVT2IyT9LXhdXZTYlhlKaY81B4f5iIGGciKRjmV2PDhqxIAKomLk0DmwHAes9Gg3XO3YR7uzSxwq0XC176U92_JQAOi5szctiZ0RBigC3_MKGScZ6P4xRCn4ix_NplrqT7ld3r8huBrJvtOHPxZ2sb4wTPJS3JuXLybM_k8zC2ZsNWrWAMs7_59A6hth2G6xxt0WDyWDoAlzRgLPq1io0C_xHYB7TMpXqAbGlb0YfQCEbNBujO7nmDHaaizt007f2qClqFBwLmYK6B4Uv3QJ16hMIpB5KTWYXgihheMq_Je2dJP29JPtZ2RrmtV71Nq8IAYrwM5g_K4b_T5kh3YB07dVOf7Cf2vhyJGq4PdUqvP2R2X5iNa160C8pLoN1HoDOecerpdXvb2U8EnZk0xAvxX2ODcRoFlmAdgrDNbAV09bjFiOlC5i_GCVUOkPsLEbTb19MBSnbla47NLMHidRKR1rZhDeVVxnUhEdP7dFkeJvBdJfTa8oyTlGOlD-gLUGLoh2XC4-F8knx6-gMeyz8pvXFDscPSILOil0IfewfkPvzQFapybLySfbr2Wf5i-4xnLk7aHQvD8lMDVlrymC4XInX-ei8U4F2TVSQtM4iAY2okoEMUACOqzS6YzPmKwkuzVe9lV7fBG9y7gRyIzTh0jtitelyH8DVd5pnYW0FRCYbz8ykFtgcrnasulI_kvwN6nbxnY-c-7-RSrivbbzxNG2Efs0CzQ4JkRBEcENX6XxZpSU3C9rONLZP-xxPojUNIq8IHmjZDAZOmkkA1RvfhPei5TOGhga0ZdGZTYH-3ch8bkcCZ5VPy7aBAtabGwsnKbPWtrQn3Lj9Gq4R3xW9ahLqCeZMjpNpQIy4KK-z7ZnjDVUDpyYdEXQmABR1IFcSnbrkki3ItysgGEVMgr7xjv5DpTfTgwZRWcLxfboDATcB_-pCMI9JXbdV2oCmzl1NU0jpSj6lOM_9KT7Rb2DAOGz_B7AIv77ksyZkOIW8IDH8aKRUVHyMEVqcxsKnbSg8tl4NCZ66RfeCb3JnFksmo8fhCiw8kfd6SlFPu1wtHI9OZPT7gCnrYubLHLl8bR-uTsSVZHMZVXqegc4LgovyMI8USq1AUcnACof8G-nShcipgIuEmaq1Fi1yaQXY6aHWObhufgGE7_zIbxh_HyHBR0zRYEMgrht6_LTMZWhtMMp9OZ7tEU0jPMqXKcJrdn2lH0AULqfs0MbqU5LprxMwsBPo-YI1yRDM3rzoHTO7dQFEfgb0FU8dngXRp--8a_N476urgDHbSQpHcpNdpUIzhstTVGxA1dpb2-CZ12tkThCPRzKJhOUeJ_UCFqAWDHGFbrZhWx4N-0fy1akwB0d1EESgRrNWPZnD05o-3kdQv0glDj4XxYzahx4N1paHzZWGN7zOLUp7E_AGHXMR9T9IWk0qvE-Ppc10sqjd1nGgVhNIsm8kKryOi3ENfmApbqIQrdzlhCZCuuYLCjalwCcUQf9x2ZuQ3Bo9ZR3UUl7uNiGYtVhw6CU7N9bGg7c5faaF2rdzNWAJjfhihOQznDDbHJhyT2PAePEjWhlYwWTHKc3zX1sPOgq6qH7UfUoBs8W5U6ZTdBkj4DqDw7qL3awnS6sXk6rMp-sCnIZ8vr0kIDw4yZF4AnkgcyMV4bRUMgw_bJE9czOapPWsi_nUSHAjoYsi593pZ_x-Faox-1apBpr0mi0-M3N9BDF6JMrq5sULOlxA2WJfvWKJ0Csi0ZTMTOLIXWj9lEzgY3FRyGtCFjcIfX-lRyI0_-t37693TtVJQz8C8_zGvTfsAV5eJ-OczxYWi0t"
+        "value": "ghBO6eeThLzEnfFZGg7Kxv6zF5QAdwTMf90Zu8pkTLxb899VcLbIk4eJpIuqGdyR5g9ckWE-o8-nm4w0LEIEjOmD3v7z3cGseKQ408ZpD-kQ9Tk70Sj9LZ8xobdnDIH-4m_PPlJPOq-NCNsQybaBGu25zJ1H8PtGcndoY7sm3iFPJpOvHEKa9zkvPcSMbvmzZr9nezvteuD9KXLQ_OGNcYBJWK8UvFHbcIooPR0Ck3ze2Om5jYMHbxyxZipJJ0csvdV2YtMbUUzapzwPNJ0gfF7w07jv751ipPvMIUMj9bIxUvE0Do3EAc3ksxdoxzhGytuyqLyRoIE9MLgxr_Q_ekybcvTw2KakxrXwGYjkqOF5qNQwV4LQ67MDrbdZe5Sls5nt0dDtWn9Qio91z9ZxmbvlXux4aYNwfjpvp1d6XUSi2Yhu2ngRz0fGabacFEGdFMiJhB8kjzhgBC0i5YVCezpVEEKaqEUbHHx-vsT_qdmkXUVXZwAgAT6t-Cg9IGPNn3iJmogAjaCwYFbr_FTOdSMzKBtxcX4znWu9NWhmuO7DKhtafmATel4Q0MER218RXc4siqTkhFQmO2wXUdJ9BN5QNjh_M4XoNXB_-2cXorKV4WEOlm3kzv_uqhP1NL4qnkORX6nd0ddzhT7bYwXzp0WIZD5vKR225K1hFK4JE06qinHfQzhT1zl8XnC3b3IDtaqc0Kt9FKd4qxOTr9ojBGZZDhNewNVKSBIIYPFJkOpt5gLgHiPs4985r4ZZStc6KtzkUqIEXJLf_-NoRyPDZ7pcqafJlKErcrH5RnK6r4pHWeFMCgtoihkkO6TPBf1LKtdJ-IJin-Cs6CPEVqSv2k9qGGox50OZMcSqu_s7nAZUxvLTN7rusblyftEAuAsk5b3xoqoXvgc1mDy0sGcO72Nqu7Atzi_A72SKRqGG8yBbBGLJg9FQn5XOKkPGvAPIAl0TymD1ZF6X-0f0CegmEhER_52CGPOfJC9Igc6orfYiLf53c_TWRLyysg6mz8EabIdORxsINfA58lYw6kNSQE4dcaOUD7g2YZMoCu3LcHEf_Yj7Z1sg0xCgxMCurlIW9wtgK4Z16H0Ak_0cV4bnVTqt50-k-NaL9R2hHoZq0MlL2veV47GbeIcbIkokp9cILKdrwtgckjnAaEcuZLpKUv_v8qZ9VVvRGq4j1bPXHAlA4Xial77D4cOUfoV95HyGbprzFd4g30vwy6lFa0P9X61lyqOZ9X47c8WUWaztejcobfKAfoTdiYejq6_tRcItBDp3OVJ0Lr1pRYQKPbrjmc4igVvbtUM72BIXyXntYf5AZqCWRG3R2x_xD2z4WpattF67A3WNPBKge405BhWTpohUHHcaF6y9nsiK4Q8baZcAzV5C9whxnI8IoQmTFlSGIpgNtPOkR5ZMOWBYCvYWXbv8stnw-h6lk0tliBpNLqtf0jC__3i97w1xCwO9v3C_RYYBSMNneNkiVugoZrHiAN8bG0-FK7td0V4-qUzkqaGw9hynx6kQAckcgT_nCI7XiHmdzvOEIWwdlQEdA_p_3zLcYb2uxML-JRMQNmI5RXh0-qQf-Csh4Rasuhsy2BOPBtrqrvKWBSJ8g2itdl6C4jzGQ32TGvheKCWBY3hCqlifSrppf7eFXRiGimW4McpZj37mQvFl1SWN3gnAQ9AMhmdSBprWXdGwp-uDiaeoczwMk417k6IOQS0vOG30Jl25vUU1Sjb7CeWvAAyUTkNC8BUGuJVz8Vp19m8N01SZtjJVxlWOsTGpL69Q9AnJpJN_iZklJiiA8Vrh4ibFK7sYA_AMaMKMkRVWn0WzVHlJIYwcJhjaTZ4WW5sc_fzhuTl1xxlhjjZ2SoVXhuWSYIGtRbOFXdwhSFq8mNuv9osAhgWQ0qj-mJeIXnCutFv_O_VCwzN76K7jp9hZfT-93-aq_rM7SLXdrmTVeclJsU9HnSB5GDG_f4k5I_8sv8fu15Vt4OGb3v5T4kyBGCLgUUGbpb3K1jXtOkg09OKNR-2HA6SWn48vzwEtoE2cWKIV80xeF5cEg07k5rLO_Vqp7qQjkxMM4URY_ctZnxF60zJe5PrD9xPUJpzRKvJoAKiFLABTzaagO9xc0z4uf0nLHQCPG3_gnBZqULOY7IIsEwBESXCVSJlWwBGKqZXIRuDGC27douqDz-_qyD8AQHrgC11j75iu-1afx62qf9e6V2wD2GjZ4_5bt8GYS1A53ytTpyTYwHWwMkXPbOBms9v0xbC5h24L8kzgo-BRMEczxb3GqVj1KA87ks7NpRL1wVo0wsjjJ07qwtZubhwLsI2INQKumWrGwGe0RIRgS7rqisx-wgIPmDnkWPxklYbpEWMr80v8izIAhYrDXCdb73EwJNv46mbMJ3amZxESJ25ZAd1trhzEWUitANt9oZPiXRJRtKtPiPzJHP1ck90oD2l2bO912gPOJXlZzP9eapW_i9DKUdR7SdV7hM2-WN5RzwzSIqId_LiEkU_agF2EpB-3Rbi6XKR_538vAzOmREAwubjB2uX3sDlVJi7tfoXCH9M2-KD3OYkv7TKLzU6Jlj2e5IgcOYNW-UZeLmJLigpazjACATbscJNJ31O0yxOYl-feZpLamg06w0pb9ggC2tJLxIJHLzMWqY8k9D_kBBR-BG-TXM8ehE0QMEugiak2cltsWAYtsNn7LrXFdXg8WKPsvo43Lb2cd6RiC9rr0lzvMShI8PujpU-Fnta8I5yE0wozzthNjEnLJFhWvXebXHodAzBM8NwyY9132xdah-zkTDD5GY_X7KPiy1gascLtOhM8bxBfRqik0KN7WDIKwwi-OFn-DAhxKEHmf45VUbMEZZsh6Q6F_jPtgBpJfvMKWbCd4HgrzzG062BsCui-11O085up5ue6WGBALn7rTJmBw-etFXhKaPhbl1upa_kywPWutxjWGkOUcu29M7qrSHHbj3l5vGtjo11m4ePMFC6QnYTyomzz11uAZxI_UpnnjFq7tbLBxcTQiLZvUTyNcSX-U5sI7ZaQT6N2PtwkBq1mWNqEY06exTfmXD34X5yEYlhrml4Joq5pIpsJCuECAPs_suM_Lq_7910vhUZ72MnRVNDJ_8XdzNhHmyDHIsZCjjZoM3Cs5gqameAvIswIvJqonSVAN32MhH85Y71xxymtsBB-X3145fJq2gS1vOGfJ3qEMzNEzMK0qh5OnMkCNG5_TBsNebjyS4YQXJpOc9VwWAU8wCaCKO3UOvRa8kjMwF7Qjx9XUoQ"
     },
     {
         "domain": ".bing.com",
