@@ -203,6 +203,7 @@ class Agent:
 
         # print("$$", state, scores)
         # Test case with number = 8
+        print("score", scores)
         scores_dist = convert_to_array(scores.mean())
         scores_dist = softmax(scores_dist)
         # print("score", scores.mean(), "| Gaussian Dist:", scores_dist)

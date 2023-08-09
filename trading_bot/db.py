@@ -31,7 +31,7 @@ scores = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('topic', String(200), nullable=False),
     Column('date', String(200), nullable=False),
-    Column('articles', String(2000), nullable=False),
+    Column('articles', String(200000), nullable=False),
     Column('score', Integer, nullable=False),
 )
 

@@ -107,7 +107,9 @@ async def get_score_before_trade(topic, ws):
                 # if answer[14].isdigit():
                 #     score_cur_week.append(int(answer[14]))
                 # else: continue
+
                 score_cur_week.append(6)
+
             score_cur_week = np.array(score_cur_week)
             if len(score_cur_week) == 0:
                 score = 4 # mean value
@@ -165,7 +167,7 @@ async def make_action(data, agent, make_order, score, test = False):
                 a = randint(0, 2)
                 action = (a, 1.)
             else:    
-                action = agent.act_with_score(x, score,is_eval=True)
+                action = agent.act_with_score(x, score, is_eval=True)
         else:
             return {'action': 'hold', 'cost':0., 'profit':0. }
     except Exception as e:
