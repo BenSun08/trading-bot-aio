@@ -3,6 +3,8 @@ alpaca-py
 nest_asyncio
 aiohttp_jinja2
 aiohttp-request-id-logging @ https://github.com/messa/aiohttp-request-id-logging/archive/v0.0.4.zip
+aiopg
+sqlalchemy
 keras
 tensorflow-cpu
 EdgeGPT

@@ -7,6 +7,12 @@ import requests
 import json
 import asyncio
 from EdgeGPT.EdgeGPT import Chatbot, ConversationStyle
+from .. import db
+import aiopg
+from trading_bot.settings import config
+
+DSN = "dbname={database} user={user} password={password} host={host} port={port}"
+dsn = DSN.format(**config['postgres'])
 
 window_size = 10
 model_name = "trading_bot/models/GOOGscore_doubledqn_50.h5"
@@ -15,9 +21,11 @@ pretrained = True
 
 def load_model(topic):
     agent = Agent(window_size, strategy=strategy, pretrained=pretrained, model_name=model_name)
-    # score = get_score_before_trade(topic)
-    score = np.ones_like(window_size) * 5.5
-    return { "agent": agent, "score": score }
+    return agent
+    # score = await get_score_before_trade(topic)
+    # print("score: ", score)
+    # score = np.ones_like(window_size) * 5.5
+    # return { "agent": agent, "score": score }
 
 q = deque(maxlen=window_size)
 
@@ -74,27 +82,49 @@ def get_stock_data(data):
     except:
         print("input sequence requires minimal length of {}, while current shape is {}".format(window_size, data.size()))
 
-def get_score_before_trade(topic):
+async def get_score_before_trade(topic):
+    print("get score before trade")
+    topic = topic.split("/")[0]
     cur_date_str = datetime.today().strftime('%Y-%m-%d') # need check the format, currently assumed as "YYYY-MM-DD"
     cur_date = cur_date_str.split("-")
-
     date = datetime(int(cur_date[0]), int(cur_date[1]), int(cur_date[2]))
-    articles = fetch_news(topic, date, num_news=3)
+    try:
+        pool = await aiopg.create_pool(dsn)
+        conn = await pool.acquire()
+        cur = await conn.cursor()
+        await cur.execute(f"SELECT * FROM scores WHERE topic = '{topic}' AND date = '{cur_date_str}';")
+        ret = []
+        async for row in cur:
+            ret.append(row)
+        print("ret", ret)
+        if len(ret) == 0:
+            articles = fetch_news(topic, date, num_news=3)
 
-    score_cur_week = []
-    for j, article in enumerate(articles,1):
-        answer = asyncio.run(get_score(article, topic))
-        if answer[14].isdigit():
-            score_cur_week.append(int(answer[14]))
-        else: continue
-    score_cur_week = np.array(score_cur_week)
-    if len(score_cur_week) == 0:
-        score = 4 # mean value
-    else:
-        score = score_cur_week.mean()
-    print("score: ", score)
-    scores_arr = np.ones_like(window_size) * score
-    return scores_arr
+            score_cur_week = []
+            for j, article in enumerate(articles,1):
+                answer = asyncio.run(get_score(article, topic))
+                if answer[14].isdigit():
+                    score_cur_week.append(int(answer[14]))
+                else: continue
+            score_cur_week = np.array(score_cur_week)
+            if len(score_cur_week) == 0:
+                score = 4 # mean value
+            else:
+                score = score_cur_week.mean()
+
+            await cur.execute(f"INSERT INTO scores (topic, date, score) VALUES ('{topic}', '{cur_date_str}', {score});")
+            conn.close()
+
+            scores_arr = np.ones_like(window_size) * score
+            return scores_arr
+        else:
+            score = ret[0][3]
+            scores_arr = np.ones_like(window_size) * score
+            conn.close()
+            return scores_arr
+    except Exception as e:
+        print("get score error: ", e)
+        conn.close()
 
 async def make_action(data, agent, make_order, score, test = False):
     print("data: ", data)

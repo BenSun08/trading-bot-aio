@@ -7,7 +7,7 @@ nest_asyncio.apply()
 
 from .alpaca_bots import AlpacaTradeBot, AlpacaDataBot, AlpacaRealTimeBot
 from ..utils import DateTimeEncoder
-from .load_model import load_model, make_action
+from .load_model import load_model, make_action, get_score_before_trade
 
 
 alpacaApp = web.Application()
@@ -214,9 +214,10 @@ async def websocket_handler(request):
                             subscribed = True
 
                             symbol = symbols[0]
-                            res = await asyncio.to_thread(load_model, symbol)
-                            agent = res['agent']
-                            score = res['score']
+                            agent  = asyncio.to_thread(load_model)
+                            # res = asyncio.to_thread(get_score_before_trade, symbol)
+                            # score = await res
+                            score = await get_score_before_trade(symbol)
 
                             async def make_order_callback(side):
                                 print("make order...")

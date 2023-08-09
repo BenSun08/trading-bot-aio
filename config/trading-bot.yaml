@@ -1,11 +1,11 @@
 postgres:
   host: localhost
   port: 5432
-  user: trading_bot
+  user: postgres
   password: trading_bot_pwd
-  database: trading_bot_db
+  database: postgres
   minsize: 1
-  maxsze: 5
+  maxsize: 5
 alpaca:
   API_KEY: PKKVITUK07ID86C1SNDL 
   SECRET_KEY: wTejgyOzMZgTrC7efjQ5JnLDJHXOuOqBSl3o2Og7

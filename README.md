@@ -120,3 +120,13 @@ rename session
 tmux rename-session - t [new-name]
 ```
 
+## Database
+
+### Postgres
+
+show tables
+
+```sh
+postgres=# \dt
+``
+
