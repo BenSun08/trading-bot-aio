@@ -248,7 +248,7 @@ async def websocket_handler(request):
                                         except Exception as e:
                                             print("make action error: ", e)
                                             await ws.send_json({ 'msg_type': 'error', e: str(e) })
-                                            trading = False
+                                            # trading = False
 
                                     await asyncio.sleep(2)
                             subsTask = request.app.loop.create_task(get_data())
