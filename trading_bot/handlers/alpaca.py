@@ -49,9 +49,12 @@ async def get_orders(request):
 async def make_order(request):
     data = await request.post()
     side = request.match_info['side']
+    type = request.query['type']
+    if type != "us_equity" and type != "crypto":
+        type = "us_equity" 
     qty = data["qty"]
     symbol = data["symbol"]
-    o = tradeBot.make_order(symbol, qty, side)
+    o = tradeBot.make_order(symbol, qty, side, type=type)
     order = { "symbol": o.symbol, "qty": o. qty, "side": o.side, "filled_avg_price": o.filled_avg_price }
     return web.json_response(order)
 
@@ -206,12 +209,14 @@ async def websocket_handler(request):
                         if type == 'us_equity' or type == 'crypto':
                             subscribed = True
 
-                            agent = await asyncio.to_thread(load_model)
                             symbol = symbols[0]
+                            res = await asyncio.to_thread(load_model, symbol)
+                            agent = res['agent']
+                            score = res['score']
 
                             async def make_order_callback(side):
                                 print("make order...")
-                                o = tradeBot.make_order(symbol, 1, side)
+                                o = tradeBot.make_order(symbol, 1, side, type=type)
                                 order = { "symbol": o.symbol, "qty": o. qty, "side": o.side, "filled_avg_price": o.filled_avg_price }
                                 print("order made...: ", order)
                                 return order
@@ -231,7 +236,7 @@ async def websocket_handler(request):
                                     if trading:
                                         try:
                                             # pass
-                                            trade_res = await make_action(res, agent, make_order_callback, test = testing)
+                                            trade_res = await make_action(res, agent, make_order_callback, test = testing, score=score)
                                             print("trade result: ", trade_res)
                                             await ws.send_json(trade_res)
                                         except Exception as e:

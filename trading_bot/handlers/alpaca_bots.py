@@ -49,13 +49,14 @@ class AlpacaTradeBot:
         print(asset)
         return asset
     
-    def make_order(self, symbol, qty, side="buy"):
+    def make_order(self, symbol, qty, side="buy", type="us_equity"):
         # preparing orders
+        time_in_force = TimeInForce.DAY if type == "us_equity" else TimeInForce.GTC
         market_order_data = MarketOrderRequest(
                             symbol=symbol,
                             qty=qty,
                             side=side,
-                            time_in_force=TimeInForce.DAY
+                            time_in_force=time_in_force
                             )
 
         # Market order
