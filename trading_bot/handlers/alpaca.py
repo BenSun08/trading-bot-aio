@@ -21,10 +21,14 @@ dataBots = {
 conns = {}
 
 @alpacaRoutes.get('/account')
-async def get_account():
+async def get_account(request):
     account = tradeBot.get_account()
     return web.json_response(account)
 
+@alpacaRoutes.get('/positions')
+async def get_positions(request):
+    pos = tradeBot.get_all_positions()
+    return web.json_response(pos)
 
 @alpacaRoutes.get('/assets/{type}')
 async def get_all_assets(request):
@@ -239,9 +243,12 @@ async def websocket_handler(request):
                                             trade_res = await make_action(res, agent, make_order_callback, test = testing, score=score)
                                             print("trade result: ", trade_res)
                                             await ws.send_json(trade_res)
+                                            account = tradeBot.get_account()
+                                            await ws.send_json(account)
                                         except Exception as e:
                                             print("make action error: ", e)
                                             await ws.send_json({ 'msg_type': 'error', e: str(e) })
+                                            trading = False
 
                                     await asyncio.sleep(2)
                             subsTask = request.app.loop.create_task(get_data())

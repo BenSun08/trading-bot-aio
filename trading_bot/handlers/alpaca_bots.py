@@ -22,9 +22,29 @@ class AlpacaTradeBot:
 
     def get_account(self):
         account = self.trading_client.get_account()
-        for property_name, value in account:
-            print(f"\"{property_name}\": {value}")
-        return account
+        # for property_name, value in account:
+        #     print(f"\"{property_name}\": {value}")
+        buy_power = account.buying_power
+        regt_buy_power = account.regt_buying_power
+        daytr_buy_power = account.daytrading_buying_power
+        non_margin_buy_power = account.non_marginable_buying_power
+        cash = account.cash
+        portfolio_value = account.portfolio_value
+        equity = account.equity
+        last_equity = account.last_equity
+        long_market_value = account.long_market_value
+        short_market_value = account.short_market_value
+        initial_margin = account.initial_margin
+        maintenance_margin = account.maintenance_margin
+        last_maintenance_margin = account.last_maintenance_margin
+        sma = account.sma
+        return { "buying_power": buy_power, "regt_buying_power": regt_buy_power,
+                "daytrading_buying_power": daytr_buy_power, "non_marginable_buying_power": non_margin_buy_power,
+                "cash": cash, "portfolio_value": portfolio_value, "equity": equity, "last_equity": last_equity,
+                "long_market_value": long_market_value, "short_market_value": short_market_value,
+                "initial_margin": initial_margin, "maintenance_margin": maintenance_margin,
+                "last_maintenance_margin": last_maintenance_margin, "sma": sma
+                }
 
     def get_asset_types(self):
         asset_types = [a.value for a in AssetClass] # "us_equity", "crypto"
@@ -80,6 +100,11 @@ class AlpacaTradeBot:
     def cancel_order(self, id):
         cancel_status = self.trading_client.cancel_order_by_id(id)
         return cancel_status
+    
+    def get_all_positions(self):
+        positions = self.trading_client.get_all_positions()
+        print(positions)
+        return json.dumps(positions, default=str)
 
 
 class AlpacaDataBot:
