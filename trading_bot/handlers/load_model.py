@@ -100,22 +100,17 @@ async def get_score_before_trade(topic, ws):
         print("ret", ret)
         if len(ret) == 0:
             articles = fetch_news(topic, date, num_news=3)
-
             score_cur_week = []
             for j, article in enumerate(articles,1):
-                # answer = asyncio.run(get_score(article, topic))
-                # if answer[14].isdigit():
-                #     score_cur_week.append(int(answer[14]))
-                # else: continue
-
-                score_cur_week.append(6)
-
+                answer = asyncio.run(get_score(article, topic))
+                if answer[14].isdigit():
+                    score_cur_week.append(int(answer[14]))
+                else: continue
             score_cur_week = np.array(score_cur_week)
             if len(score_cur_week) == 0:
                 score = 4 # mean value
             else:
                 score = score_cur_week.mean()
-
             await ws.send_json({ "articles": articles, "score": score })
 
             comma = "'s"
